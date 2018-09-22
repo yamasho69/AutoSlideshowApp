@@ -5,12 +5,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
 
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="前の画像"
+            android:id="@+id/back_button"/>
 
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="自動再生"
+            android:id="@+id/auto_button"/>
 
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="次の画像"
+            android:id="@+id/next_button"/>
 </LinearLayout>

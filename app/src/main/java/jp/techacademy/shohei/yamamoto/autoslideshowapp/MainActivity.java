@@ -10,9 +10,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button mBackButton;
+    Button mAutoButton;
+    Button mNextButton;
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
@@ -20,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mBackButton = (Button)findViewById(R.id.back_button);
+        mAutoButton = (Button)findViewById(R.id.auto_button);
+        mNextButton = (Button)findViewById(R.id.next_button);
 
         // Android 6.0以降の場合
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -35,6 +45,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getContentsInfo();
         }
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mAutoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -72,4 +102,6 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+
+
 }
