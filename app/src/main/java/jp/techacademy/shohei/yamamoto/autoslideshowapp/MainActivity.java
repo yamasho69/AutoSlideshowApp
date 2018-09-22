@@ -11,11 +11,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Button;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -154,7 +156,11 @@ public class MainActivity extends AppCompatActivity{
         switch (requestCode) {
             case PERMISSIONS_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getContentsInfo();
+                    Log.d("Android", "許可された");
+                }else {
+                    Log.d("Android","許可されなかった");
+                    Toast.makeText(this,"アプリの起動に許可は必須です",Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 break;
             default:
