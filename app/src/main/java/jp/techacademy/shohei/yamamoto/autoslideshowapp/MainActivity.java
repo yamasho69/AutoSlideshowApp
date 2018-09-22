@@ -1,5 +1,6 @@
 package jp.techacademy.shohei.yamamoto.autoslideshowapp;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
@@ -13,6 +14,8 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Button;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     Button mNextButton;
     ImageView imageView;
     Cursor cursor = null;
+    Timer mTimer;
+
+    double mTimerSec = 0.0;
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
@@ -29,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBackButton = (Button)findViewById(R.id.back_button);
-        mAutoButton = (Button)findViewById(R.id.auto_button);
-        mNextButton = (Button)findViewById(R.id.next_button);
+        Handler mHandler = new Handler();
+
+        mBackButton = (Button) findViewById(R.id.back_button);
+        mAutoButton = (Button) findViewById(R.id.auto_button);
+        mNextButton = (Button) findViewById(R.id.next_button);
 
         // Android 6.0以降の場合
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cursor.moveToNext()==false) {
+                if (cursor.moveToNext() == false) {
                     cursor.moveToFirst();
                     int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
                     Long id = cursor.getLong(fieldIndex);
@@ -96,8 +104,33 @@ public class MainActivity extends AppCompatActivity {
         mAutoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mTimer == null) {
+                    mAutoButton.setText("停止");
+                    mTimer = new Timer();
+                    mTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (cursor.moveToNext() == false) {
+                                cursor.moveToFirst();
+                                int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                                Long id = cursor.getLong(fieldIndex);
+                                Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
+                                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                                imageView.setImageURI(imageUri);
+                            } else {
+                                cursor.moveToNext();
+                                int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                                Long id = cursor.getLong(fieldIndex);
+                                Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+
+                                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                                imageView.setImageURI(imageUri);
+                            }
+                        }
+                    },2000,2000);
                 }
+            }
         });
     }
 
