@@ -17,7 +17,7 @@ import android.widget.Button;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     Button mBackButton;
     Button mAutoButton;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Handler mHandler = new Handler();
+        final Handler mHandler = new Handler();
 
         mBackButton = (Button) findViewById(R.id.back_button);
         mAutoButton = (Button) findViewById(R.id.auto_button);
@@ -106,8 +106,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mTimer == null) {
                     mAutoButton.setText("停止");
+                    mNextButton.setEnabled(false);
+                    mBackButton.setEnabled(false);
                     mTimer = new Timer();
+                    mTimerSec = 0.0;
                     mTimer.schedule(new TimerTask() {
+                        @Override
+                        public  void run(){
+                            mTimerSec += 0.1;
+                            mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (cursor.moveToNext() == false) {
@@ -128,9 +135,17 @@ public class MainActivity extends AppCompatActivity {
                                 imageView.setImageURI(imageUri);
                             }
                         }
+                            });
+                        }
                     },2000,2000);
-                }
+                }else{
+                mAutoButton.setText("再生");
+                mBackButton.setEnabled(true);
+                mNextButton.setEnabled(true);
+                mTimer.cancel();
+                mTimer = null;
             }
+        }
         });
     }
 
