@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     Button mBackButton;
     Button mAutoButton;
     Button mNextButton;
+    ImageView imageView;
+    Cursor cursor = null;
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
@@ -48,14 +50,26 @@ public class MainActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    cursor.moveToNext();
+                    int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                    Long id = cursor.getLong(fieldIndex);
+                    Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-            }
+                    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    imageView.setImageURI(imageUri);
+                }
         });
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cursor.moveToPrevious();
+                int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                Long id = cursor.getLong(fieldIndex);
+                Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
+                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                imageView.setImageURI(imageUri);
             }
         });
 
@@ -63,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-            }
+                }
         });
     }
 
@@ -84,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         //画像の情報を取得する
         ContentResolver resolver = getContentResolver();
-        Cursor cursor = resolver.query(
+        cursor = resolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, //データの種類
                 null, //項目(null=全項目)
                 null, //フィルタ条件（null＝フィルタなし）
@@ -99,9 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
             imageView.setImageURI(imageUri);
-            cursor.close();
+            //cursor.close();
         }
     }
-
-
 }
